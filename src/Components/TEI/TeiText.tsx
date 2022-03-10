@@ -1,5 +1,10 @@
+import React, { FC, ReactElement } from "react";
 import { forEachChild } from "typescript";
 import { dbDoc } from "../../CloudAPI/db";
+import TeiCloser from "./TeiCloser";
+import TeiJustification from "./TeiJustification";
+import TeiSalute from "./TeiSalute";
+import TeiSelfRef from "./TeiSelfRef";
 var builder = require('xmlbuilder');
 type textElement = {text:string};
 type saluteElement = {salute:any} ;
@@ -75,4 +80,27 @@ const GetTeiText = (entryData:dbDoc):any =>{
     // return "";
 }
 
+const GetReactElement = (element: arrayElement):ReactElement =>{
+    switch(element.type){
+        case 'closer':
+            return <TeiCloser value={element.value}/>;
+        case 'salute':
+            return <TeiSalute value={element.value}/>;
+        case 'selfRef':
+            return <TeiSelfRef value={element.value}/>;
+        case 'justification':
+            return <TeiJustification value={element.value}/>;
+        default: //closer|salute
+            return <>{element.value}</>;
+    }
+}
+
+const TeiTextElement: FC<{entryData:dbDoc}> = ({ entryData}: {entryData:dbDoc}): ReactElement => {
+    let bodyArray:arrayElement[] = BuildBodyElementsArray(entryData);
+    
+       console.log('before render');
+      return <div>{bodyArray.map(element => GetReactElement(element))}</div>;
+}
+
+export default TeiTextElement;
 export {GetTeiText};

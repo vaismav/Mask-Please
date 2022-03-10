@@ -6,8 +6,8 @@ type Props ={
     value:string
 }
 
-const TeiSalute: FC<Props> = ({ value = ""}: Props): ReactElement => {
-    return <HighlightedText value={value} color="blue" tooltip='A salute'/>
+const TeiSelfRef: FC<Props> = ({ value = ""}: Props): ReactElement => {
+    return <HighlightedText value={value} color="orange" tooltip='A selfReference'/>
 }
 
-export default TeiSalute;
+export default TeiSelfRef;
