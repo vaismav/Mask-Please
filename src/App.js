@@ -5,7 +5,7 @@ import { getData, allDocs } from './CloudAPI';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
 import DataCard from './Components/DataCard';
-import {Stack} from '@mui/material';
+import {Stack, Grid} from '@mui/material';
 import { useEffect, useState } from 'react';
 import {update} from './scripts/pushToDb';
 
@@ -29,9 +29,18 @@ function  App() {
           <h3>Weak Design, Strong TEI!</h3>
         </div>
       
-        <Stack direction='row'>
-          {data && data.map(e =><div><DataCard entryDoc={e}/></div>)}
-        </Stack>
+        <Grid container spacing={1}>
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
+          
+        </Grid>
       </Stack>
       
     </div>

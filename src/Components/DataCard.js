@@ -36,6 +36,8 @@ export default function DataCard({entryDoc}) {
   const [expanded, setExpanded] = React.useState(false);
   const [viewXML, setViewXML] = React.useState(false);
 
+  const cardMaxWidth = 345;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -74,7 +76,7 @@ export default function DataCard({entryDoc}) {
         </ExpandMore>
         
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit sx={{position:'absolute', width:cardMaxWidth, backgroundColor:'white', overflow:'scroll'}}>
         <CardContent>
           {   viewXML ?
             Xml(entryDoc)
