@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import { forEachChild } from "typescript";
-import { dbDoc } from "../../CloudAPI/db";
+import { dbDoc } from "../../CloudAPI/PrepareData";
 import TeiCloser from "./TeiCloser";
 import TeiJustification from "./TeiJustification";
 import TeiSalute from "./TeiSalute";

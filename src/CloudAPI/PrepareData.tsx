@@ -97,3 +97,7 @@ const Json2DbDoc = (data:entryData):dbDoc =>{
 }
 
 export {Json2DbDoc,entryData,dbDoc};
+
+module.exports = {
+    Json2DbDoc
+};

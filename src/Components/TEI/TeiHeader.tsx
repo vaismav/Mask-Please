@@ -1,4 +1,4 @@
-import { dbDoc } from "../../CloudAPI/db";
+import { dbDoc } from "../../CloudAPI/PrepareData";
 import { GetTeiText } from "./TeiText";
 var builder = require('xmlbuilder');
 

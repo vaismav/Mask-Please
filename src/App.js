@@ -1,28 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
 import { getData } from './CloudAPI';
-import {Json2DbDoc} from './CloudAPI/db.tsx';
+// import {Json2DbDoc} from './CloudAPI/db.tsx';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
 import DataCard from './Components/DataCard';
 import {Stack} from '@mui/material';
 import { useEffect, useState } from 'react';
+import {update} from './scripts/pushToDb';
 
 function  App() {
   const [data,setData] = useState([])
   // const data = getData();
   // console.log(data);
   useEffect(()=>{
-    setData(getData().map(obj => {
-      const newObj = obj;
-      return Json2DbDoc(newObj)
-    }))
+    // setData(getData().map(obj => {
+    //   const newObj = obj;
+    //   return Json2DbDoc(newObj)
+    // }))
   },[setData])
   
   console.log(data);
 
   return (
     <div className="App">
+      <button onClick={update}>update</button>
       <Stack>
         <div style={{textAlign:"center"}}>
           <h1>Mask Please!</h1>

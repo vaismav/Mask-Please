@@ -1,7 +1,7 @@
 
-const getData = () => ({
-    "20200621_084340.jpg-44003": 	{
-        "identifier": "20200621_084340.jpg",
+const getData = () => [
+    {
+        identifier: "20200621_084340.jpg",
         "description": "הכניסה מותרת בחבישת מסכה בלבד!!",
         "justification": "",
         "justificationClustered": "",
@@ -22,7 +22,7 @@ const getData = () => ({
         "creator": "Yael Netzer",
         "comment": "HAHAHA comment"
     },
-    "20200704_174832.jpg-44016": 	{
+    {
         "identifier": "20200704_174832.jpg",
         "description": "שלום אורחים נכבדים של כלבו אבישי, נא להכנס עם מסיכה בלבד יש לשמור על 2 מטר מרחק אין להכנס בהתקהלות אלא לפי כללי הזהירות נא לשמור על ההנחיות למען ביטחונכם וביטחון הציבור. תודה.",
         "justification": "למען ביטחונכם|ביטחון הציבור",
@@ -45,6 +45,6 @@ const getData = () => ({
         "creator": "Yael Netzer",
         "comment": "",
     }
-});
+];
 
 export { getData} ;
