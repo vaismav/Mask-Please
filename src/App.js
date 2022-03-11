@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { getData } from './CloudAPI';
+import { getData, allDocs } from './CloudAPI';
 // import {Json2DbDoc} from './CloudAPI/db.tsx';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
@@ -13,18 +13,15 @@ function  App() {
   const [data,setData] = useState([])
   // const data = getData();
   // console.log(data);
-  useEffect(()=>{
-    // setData(getData().map(obj => {
-    //   const newObj = obj;
-    //   return Json2DbDoc(newObj)
-    // }))
-  },[setData])
+  useEffect(async ()=>{
+    allDocs().then(res => {console.log(res); setData(res)});
+  },[])
   
   console.log(data);
 
   return (
     <div className="App">
-      <button onClick={update}>update</button>
+      {false && <button onClick={update}>update</button>}
       <Stack>
         <div style={{textAlign:"center"}}>
           <h1>Mask Please!</h1>

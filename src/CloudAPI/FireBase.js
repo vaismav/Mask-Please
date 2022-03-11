@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {getFirestore, addDoc, collection } from 'firebase/firestore';
+import {getFirestore, addDoc, collection ,getDocs} from 'firebase/firestore';
 import firebaseConfigs  from "./envData/firebaseConfigs";
 
 const app = initializeApp(firebaseConfigs);
@@ -15,4 +15,15 @@ const newDoc = async data => {
     console.error("Error adding document: ", e);
   }
 }
-export { db ,newDoc};
+
+const allDocs = () => getDocs(collection(db, "docs")).then(async snapshot =>{
+    let output =[]
+    await snapshot.forEach( doc => output.push(doc.data()));
+    // console.log(output);
+    return output;
+  }).catch(e => {
+    console.log(e);
+    return [];
+  });
+
+export { db , newDoc, allDocs};

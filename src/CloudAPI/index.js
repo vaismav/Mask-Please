@@ -1,4 +1,4 @@
-
+import { allDocs } from "./FireBase";
 const getData = () => [
     {
         identifier: "20200621_084340.jpg",
@@ -47,4 +47,4 @@ const getData = () => [
     }
 ];
 
-export { getData} ;
+export { getData, allDocs} ;
