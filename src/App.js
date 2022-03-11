@@ -4,20 +4,37 @@ import { getData } from './CloudAPI';
 import {Json2DbDoc} from './CloudAPI/db.tsx';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
+import DataCard from './Components/DataCard';
+import {Stack} from '@mui/material';
+import { useEffect, useState } from 'react';
 
-function App() {
-  const data = getData();
+function  App() {
+  const [data,setData] = useState([])
+  // const data = getData();
+  // console.log(data);
+  useEffect(()=>{
+    setData(getData().map(obj => {
+      const newObj = obj;
+      return Json2DbDoc(newObj)
+    }))
+  },[setData])
+  
   console.log(data);
-  let output = [];
-  for( let entry in data){
-    // console.log(Json2DbDoc(data[entry]));
-    output.push(<TeiTextElement entryData={Json2DbDoc(data[entry])}/>);
-    // console.log(GetTeiText(Json2DbDoc(data[entry])).end({ pretty: true}));
-  }
 
   return (
     <div className="App">
-      {output}
+      <Stack>
+        <div style={{textAlign:"center"}}>
+          <h1>Mask Please!</h1>
+          <h2> by Yfim and Avishai</h2>
+          <h3>Weak Design, Strong TEI!</h3>
+        </div>
+      
+        <Stack direction='row'>
+          {data && data.map(e =><div><DataCard entryDoc={e}/></div>)}
+        </Stack>
+      </Stack>
+      
     </div>
   );
 }
