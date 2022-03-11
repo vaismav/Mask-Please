@@ -10,6 +10,8 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TeiTextElement from './TEI/TeiText';
+import {GetTeiDoc} from './TEI/TeiHeader';
+
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -22,8 +24,17 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+const Xml = entryDoc =>{
+  const text = GetTeiDoc(entryDoc);
+  const copy = () => navigator.clipboard.writeText(text).then(() => alert("Copied the TEI to the clipboard"));
+  return <>
+    <button onClick={copy} >Copy to clipboard</button>
+    <pre style={{textAlign:'left'}}>{text}</pre>
+  </>
+}
 export default function DataCard({entryDoc}) {
   const [expanded, setExpanded] = React.useState(false);
+  const [viewXML, setViewXML] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -48,6 +59,11 @@ export default function DataCard({entryDoc}) {
       <CardContent>
       </CardContent>
       <CardActions disableSpacing>
+        { expanded &&
+          <>
+          <button onClick={() => setViewXML(!viewXML)}>{viewXML ? "Display Text" : "Display XML"}</button>
+          </>
+        }
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -56,10 +72,15 @@ export default function DataCard({entryDoc}) {
         >
           <ExpandMoreIcon />
         </ExpandMore>
+        
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <TeiTextElement entryData={entryDoc}/>
+          {   viewXML ?
+            Xml(entryDoc)
+            :
+            <TeiTextElement entryData={entryDoc}/>
+          }
         </CardContent>
       </Collapse>
     </Card>

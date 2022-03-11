@@ -99,15 +99,20 @@ const GetTeiHeader = (entryData:dbDoc):string =>{
 }
 
 const GetTeiDoc = (entryData:dbDoc):string =>{
-    var output = builder.create('TEI').att({xmlns:'http://www.tei-c.org/ns/1.0'});
+    try{
+        let output = builder.create('TEI').att({xmlns:'http://www.tei-c.org/ns/1.0'});
     
-    output.importDocument(GetTeiHeader(entryData));
-    // output.raw('texitext')
-    output.importDocument(GetTeiText(entryData));
+        output.importDocument(GetTeiHeader(entryData));
+        // output.raw('texitext')
+        output.importDocument(GetTeiText(entryData));
 
-    console.log(output.end({ pretty: true}));
-       
-      return output;
+        // console.log(output.end({ pretty: true}));
+        return output.end({ pretty: true});
+    }
+    catch(e){
+        console.log(e);
+        return "Error occurred";
+    }
 }
 
 export {GetTeiHeader, GetTeiDoc};
