@@ -5,19 +5,29 @@ import { getData, allDocs } from './CloudAPI';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
 import DataCard from './Components/DataCard';
-import {Stack, Grid} from '@mui/material';
+import {Stack, Grid,Autocomplete, TextField} from '@mui/material';
 import { useEffect, useState } from 'react';
 import {update} from './scripts/pushToDb';
+import  {CreateSetsObject} from 'utilities/CreateSet';
+import AutocompleteSearch from 'Components/AutoComplete';
 
 function  App() {
-  const [data,setData] = useState([])
-  // const data = getData();
-  // console.log(data);
+  const [data,setData] = useState([]);
+  const [metadataObj, setMetadataObj] = useState();
   useEffect(async ()=>{
     allDocs().then(res => {console.log(res); setData(res)});
   },[])
   
-  console.log(data);
+  useEffect(()=>{
+    console.log(data);
+    if(data && Array.isArray(data)){
+      setMetadataObj(CreateSetsObject(data))
+      let obj = CreateSetsObject(data);
+      console.log(obj);
+    }
+    
+  },[data])
+  
 
   return (
     <div className="App">
@@ -28,7 +38,11 @@ function  App() {
           <h2> by Yfim and Avishai</h2>
           <h3>Weak Design, Strong TEI!</h3>
         </div>
-      
+        <Grid container spacing={2}>
+          <Grid item>
+            <AutocompleteSearch attribute='script' valuesSet={metadataObj['script']} updateValue={()=>{}} />
+          </Grid>          
+        </Grid>
         <Grid container spacing={1}>
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
@@ -39,7 +53,7 @@ function  App() {
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          
+
         </Grid>
       </Stack>
       
