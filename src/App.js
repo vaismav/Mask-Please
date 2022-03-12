@@ -11,9 +11,60 @@ import {update} from './scripts/pushToDb';
 import  {CreateSetsObject} from 'utilities/CreateSet';
 import AutocompleteSearch from 'Components/AutoComplete';
 
+const initFilters = () => ({
+  justification: '',
+    justificationClustered: '',
+    salutation: '',
+    closing: '',
+    selfReference: '',
+    image: '',
+    language: '',
+    format: '',
+    script: '',
+    material: '',
+    businessType: '',
+})
+
+
 function  App() {
   const [data,setData] = useState([]);
   const [metadataObj, setMetadataObj] = useState();
+  const [filters, setFilters] = useState(initFilters())
+  const [justification, setJustification ] = useState('');
+  const [salutation, setSalutation ] = useState('');
+  const [closing, setClosing ] = useState('');
+  const [selfReference, setSelfReference ] = useState('');
+  const [language, setLanguage ] = useState('');
+  const [format, setFormat ] = useState('');
+  const [script, setScript ] = useState('');
+  const [material, setMaterial ] = useState('');
+  const [businessType, setBusinessType ] = useState('');
+  const [filtersSetters, setFiltersSetters] = useState({
+    justification: setJustification,
+    salutation: setSalutation,
+    closing: setClosing,
+    selfReference: setSelfReference,
+    language: setLanguage,
+    format: setFormat,
+    script: setScript,
+    material: setMaterial,
+    businessType: setBusinessType,
+  });
+
+  const getFiltersValuesObject = () => ({
+    'justification': justification,
+    'salutation': salutation,
+    'closing': closing,
+    'selfReference': selfReference,
+    'language': language,
+    'format': format,
+    'script': script,
+    'material': material,
+    'businessType': businessType
+  });
+
+  const filtersDependencies = [ justification,salutation,closing,selfReference,language,format,script,material,businessType];
+
   useEffect(async ()=>{
     allDocs().then(res => {console.log(res); setData(res)});
   },[])
@@ -26,8 +77,30 @@ function  App() {
       console.log(obj);
     }
     
-  },[data])
+  },[data]);
+
+  useEffect(()=>{
+    console.log(getFiltersValuesObject());
+  },filtersDependencies)
   
+  const getAutocompleteForFilter = (att) => <Grid item>
+      { metadataObj && metadataObj[att] && filtersSetters && filtersSetters[att] &&
+        <AutocompleteSearch attribute={att} valuesSet={Array.from(metadataObj[att])} updateValue={filtersSetters[att]} />
+      }
+    </Grid>
+
+
+// TODO HERE
+  const getFilteredDocs = () =>{
+    const filtersObj = getFiltersValuesObject();
+    data.filter(doc => {
+      return doc && Object.keys(filtersObj).reduce((prev,currKey)=> 
+         prev && filtersObj[currKey]? doc[currKey].includes(filtersObj[currKey]) : true
+        ,true)  
+    })
+  }
+
+  console.log(getFilteredDocs());
 
   return (
     <div className="App">
@@ -39,9 +112,9 @@ function  App() {
           <h3>Weak Design, Strong TEI!</h3>
         </div>
         <Grid container spacing={2}>
-          <Grid item>
-            <AutocompleteSearch attribute='script' valuesSet={metadataObj['script']} updateValue={()=>{}} />
-          </Grid>          
+          {
+            Object.keys(getFiltersValuesObject()).map(key => getAutocompleteForFilter(key))
+          }        
         </Grid>
         <Grid container spacing={1}>
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
