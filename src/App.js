@@ -68,7 +68,7 @@ function  App() {
 
   const handleItemsNumberChange = e => {
     e.preventDefault();
-    setNumberOfItems(e.target.value);
+    setNumberOfItems(e.target.value? e.target.value : 1);
   }
 
 

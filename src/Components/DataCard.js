@@ -3,7 +3,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
@@ -52,7 +51,7 @@ export default function DataCard({entryDoc}) {
   if(!entryDoc){
     return <></>;
   }
-
+  
   return (
     <Card sx={{ maxWidth: cardMaxWidth }}>
       <CardHeader
@@ -60,14 +59,16 @@ export default function DataCard({entryDoc}) {
         title={entryDoc.title}
         subheader="September 14, 2016"
       />
-      {/* <CardMedia
-        component="img"
-        height="194"
-        image="/static/images/cards/paella.jpg"
-      /> */}
-      <img src={imageRef}
-        style={{ width:'100%', height:'195px' }}/>
+      
       <CardContent>
+      <img src={imageRef}
+      style={{ width:'100%', height:'195px' }}
+      onError={({ currentTarget }) => {
+        currentTarget.onerror = null; // prevents looping
+        currentTarget.src="";
+      }}
+      alt={entryDoc.identifier}
+      />
       </CardContent>
       <CardActions disableSpacing>
         { expanded &&

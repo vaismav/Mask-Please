@@ -3,7 +3,7 @@ import {getFirestore, addDoc, collection ,getDocs, query, limit, where, doc, set
 import firebaseConfigs  from "./envData/firebaseConfigs";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
-const app = initializeApp(firebaseConfigs);
+initializeApp(firebaseConfigs);
 const storage = getStorage();
 const db = getFirestore();
 
@@ -78,7 +78,7 @@ const getImageRef = async path => getDownloadURL(ref(storage, path)).then(url =>
   
       // ...
   
-      case "storage/unknown":
+      default:
         console.error("Unknown error occurred, inspect the server response");
         break;
     }

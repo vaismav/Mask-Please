@@ -1,13 +1,10 @@
 import { Autocomplete, TextField } from "@mui/material";
-import React, { FC, ReactElement, useState } from "react";
+import React, {  useState } from "react";
 
 const AutocompleteSearch = ({attribute, valuesSet, updateValue}) =>{
     const [inputValue, setInputValue] = useState('');
     const [value, setValue] = useState('');
     return(
-        <>
-        {/* <p>inputValue: {inputValue}</p>
-        <p>value: {value}</p> */}
         <Autocomplete
             freeSolo
             id={"combo-box-demo-"+attribute}
@@ -22,11 +19,8 @@ const AutocompleteSearch = ({attribute, valuesSet, updateValue}) =>{
               }}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label={attribute} />}
-          />
-        </>
-        
+          />        
     )
-
 }
 
 export default AutocompleteSearch;

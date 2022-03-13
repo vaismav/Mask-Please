@@ -1,5 +1,4 @@
 import React, { FC, ReactElement, } from 'react';
-import { makeStyles, Theme  } from '@mui/material';
 import HighlightedText from '../HighlightedText';
 
 type Props ={

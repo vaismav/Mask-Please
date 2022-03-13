@@ -1,16 +1,10 @@
 import React, { FC, ReactElement } from "react";
-import { forEachChild } from "typescript";
 import { dbDoc } from "../../CloudAPI/PrepareData";
 import TeiCloser from "./TeiCloser";
 import TeiJustification from "./TeiJustification";
 import TeiSalute from "./TeiSalute";
 import TeiSelfRef from "./TeiSelfRef";
 var builder = require('xmlbuilder');
-type textElement = {text:string};
-type saluteElement = {salute:any} ;
-type closerElement = {closer:any};
-type selfRefElement =  {selfRef:any} ;
-type justificationElement =  {justification: any} ;
 
 type arrayElement = {
     type: tagString,
@@ -21,8 +15,6 @@ type tagString =  'text'|'salute'|'closer'|'selfRef'|'justification';
 
 
 const CreateArrayElement = (element:tagString,value:string):arrayElement => ({type: element, value});
-
-const GetTextElementString = (tag:tagString, att:any = {}, value:string ):string =>builder.create(tag).txt(value).att(att).end();
 
 
 const UpdateElementsArray =  (tag:tagString,  stringArray:string[], body:arrayElement[]):arrayElement[] =>{
