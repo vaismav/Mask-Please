@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { getData, allDocs } from './CloudAPI';
+import { getData, allDocs,queryDocs } from './CloudAPI';
 // import {Json2DbDoc} from './CloudAPI/db.tsx';
 import { GetTeiDoc} from './Components/TEI/TeiHeader';
 import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import {update} from './scripts/pushToDb';
 import  {CreateSetsObject} from 'utilities/CreateSet';
 import AutocompleteSearch from 'Components/AutoComplete';
+import { getStorage, ref } from "firebase/storage";
 
 const initFilters = () => ({
   justification: '',
@@ -28,6 +29,7 @@ const initFilters = () => ({
 
 function  App() {
   const [data,setData] = useState([]);
+  const [dataToDisplay,setDataToDisplay] = useState([]);
   const [metadataObj, setMetadataObj] = useState();
   const [filters, setFilters] = useState(initFilters())
   const [justification, setJustification ] = useState('');
@@ -66,7 +68,7 @@ function  App() {
   const filtersDependencies = [ justification,salutation,closing,selfReference,language,format,script,material,businessType];
 
   useEffect(async ()=>{
-    allDocs().then(res => {console.log(res); setData(res)});
+    queryDocs().then(res => {console.log(res); setData(res)});
   },[])
   
   useEffect(()=>{
@@ -80,11 +82,8 @@ function  App() {
   },[data]);
 
   useEffect(()=>{
-    console.log(getFiltersValuesObject());
-    if(data){
-      
-    }
-  },[data, ...filtersDependencies])
+    queryDocs().then(res => {console.log(res); setData(res)});
+  },[...filtersDependencies])
   
   const getAutocompleteForFilter = (att) => <Grid item>
       { metadataObj && metadataObj[att] && filtersSetters && filtersSetters[att] &&
@@ -120,14 +119,6 @@ function  App() {
           }        
         </Grid>
         <Grid container spacing={1}>
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
-          {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
           {data && data.map(e =><Grid item ><DataCard entryDoc={e}/></Grid>)}
 
         </Grid>

@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TeiTextElement from './TEI/TeiText';
 import {GetTeiDoc} from './TEI/TeiHeader';
+import { getImageRef } from '../CloudAPI';
 
 
 const ExpandMore = styled((props) => {
@@ -32,11 +33,17 @@ const Xml = entryDoc =>{
     <pre style={{textAlign:'left'}}>{text}</pre>
   </>
 }
+
 export default function DataCard({entryDoc}) {
   const [expanded, setExpanded] = React.useState(false);
   const [viewXML, setViewXML] = React.useState(false);
+  const [imageRef,setImageRef] = React.useState('');
 
-  const cardMaxWidth = 345;
+  const cardMaxWidth = 400;
+
+  React.useEffect(()=>
+    getImageRef(entryDoc.identifier).then(url => setImageRef(url))
+  )
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -47,17 +54,19 @@ export default function DataCard({entryDoc}) {
   }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: cardMaxWidth }}>
       <CardHeader
 
         title={entryDoc.title}
         subheader="September 14, 2016"
       />
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="194"
         image="/static/images/cards/paella.jpg"
-      />
+      /> */}
+      <img src={imageRef}
+        style={{ width:'100%', height:'195px' }}/>
       <CardContent>
       </CardContent>
       <CardActions disableSpacing>
@@ -76,7 +85,7 @@ export default function DataCard({entryDoc}) {
         </ExpandMore>
         
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit sx={{position:'absolute', width:cardMaxWidth, backgroundColor:'white', overflow:'scroll'}}>
+      <Collapse in={expanded} timeout="auto" unmountOnExit sx={{position:'absolute', width:`${cardMaxWidth}px`, backgroundColor:'white', overflow:'scroll'}}>
         <CardContent>
           {   viewXML ?
             Xml(entryDoc)
