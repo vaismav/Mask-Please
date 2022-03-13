@@ -1,25 +1,11 @@
-import { getData, allDocs,queryDocs,where , getMetaData} from './CloudAPI';
+import { queryDocs,where , getMetaData} from './CloudAPI';
 import DataCard from './Components/DataCard';
 import {Stack, Grid, Slider} from '@mui/material';
 import { useEffect, useState } from 'react';
 import {update, updateMetaData} from './scripts/pushToDb';
-import  {CreateSetsObject} from 'utilities/CreateSet';
 import AutocompleteSearch from 'Components/AutoComplete';
 
 
-const initFilters = () => ({
-  justification: '',
-    justificationClustered: '',
-    salutation: '',
-    closing: '',
-    selfReference: '',
-    image: '',
-    language: '',
-    format: '',
-    script: '',
-    material: '',
-    businessType: '',
-})
 
 
 function  App() {
@@ -36,7 +22,7 @@ function  App() {
   const [script, setScript ] = useState('');
   const [material, setMaterial ] = useState('');
   const [businessType, setBusinessType ] = useState('');
-  const [filtersSetters, setFiltersSetters] = useState({
+  const [filtersSetters] = useState({
     justification: setJustification,
     salutation: setSalutation,
     closing: setClosing,

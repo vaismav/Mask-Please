@@ -64,23 +64,26 @@ const queryDocs = (queryArray = [],lim=10) => getDocs(query(collection(db, "docs
 const getImageRef = async path => getDownloadURL(ref(storage, path)).then(url => url).catch((error) => {
   // A full list of error codes is available at
   // https://firebase.google.com/docs/storage/web/handle-errors
-  switch (error.code) {
-    case 'storage/object-not-found':
-      console.error("File doesn't exist");
-      break;
-    case "storage/unauthorized":
-      console.error("User doesn't have permission to access the object");
-      break;
-    case "storage/canceled":
-      console.error("User canceled the upload");
-      break;
-
-    // ...
-
-    case "storage/unknown":
-      console.error("Unknown error occurred, inspect the server response");
-      break;
+  if(false){
+    switch (error.code) {
+      case 'storage/object-not-found':
+        console.error("File doesn't exist");
+        break;
+      case "storage/unauthorized":
+        console.error("User doesn't have permission to access the object");
+        break;
+      case "storage/canceled":
+        console.error("User canceled the upload");
+        break;
+  
+      // ...
+  
+      case "storage/unknown":
+        console.error("Unknown error occurred, inspect the server response");
+        break;
+    }
   }
+  
   return '';
 });
 
