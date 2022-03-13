@@ -81,7 +81,10 @@ function  App() {
 
   useEffect(()=>{
     console.log(getFiltersValuesObject());
-  },filtersDependencies)
+    if(data){
+      
+    }
+  },[data, ...filtersDependencies])
   
   const getAutocompleteForFilter = (att) => <Grid item>
       { metadataObj && metadataObj[att] && filtersSetters && filtersSetters[att] &&
