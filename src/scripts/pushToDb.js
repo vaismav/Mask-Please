@@ -1,4 +1,5 @@
-import {db, newDoc} from '../CloudAPI/FireBase';
+import {db, newDoc,updateMeta} from '../CloudAPI/FireBase';
+import data from './allData';
 
 // type dbDoc = {
 //     identifier: string,
@@ -97,7 +98,7 @@ const Json2DbDoc = (data) =>{
     return dbDoc;
 }
 
-const data = [
+const dataTest = [
     {
         identifier: "20200621_084340.jpg",
         "description": "הכניסה מותרת בחבישת מסכה בלבד!!",
@@ -144,8 +145,38 @@ const data = [
     }
 ];
 
-const update = () => data.forEach(entry => {
-    newDoc(Json2DbDoc(entry));
-})
+const update = () => {
 
-export { update};
+        data.forEach(entry => {
+        newDoc(Json2DbDoc(entry));
+    });
+}
+
+const updateMetaData = () => {
+    let metaData = {
+        justification: [],
+        salutation: [],
+        closing: [],
+        selfReference: [],
+        image: [],
+        language: [],
+        format: [],
+        script: [],
+        material: [],
+        businessType: [],
+    };
+    data.forEach(entry => {
+        let dbDoc = Json2DbDoc(entry);
+        for(let key in metaData){
+            metaData[key] = metaData[key].concat(dbDoc[key])
+        }
+
+    });
+    for(let key in metaData){
+        metaData[key] = [...new Set(metaData[key])];
+    }
+    console.log(metaData);
+    updateMeta(metaData);
+}
+
+export { update, updateMetaData};

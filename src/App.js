@@ -1,16 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
-import { getData, allDocs,queryDocs } from './CloudAPI';
-// import {Json2DbDoc} from './CloudAPI/db.tsx';
-import { GetTeiDoc} from './Components/TEI/TeiHeader';
-import TeiTextElement, { GetTeiText} from './Components/TEI/TeiText';
+import { getData, allDocs,queryDocs,where , getMetaData} from './CloudAPI';
 import DataCard from './Components/DataCard';
-import {Stack, Grid,Autocomplete, TextField} from '@mui/material';
+import {Stack, Grid, Slider} from '@mui/material';
 import { useEffect, useState } from 'react';
-import {update} from './scripts/pushToDb';
+import {update, updateMetaData} from './scripts/pushToDb';
 import  {CreateSetsObject} from 'utilities/CreateSet';
 import AutocompleteSearch from 'Components/AutoComplete';
-import { getStorage, ref } from "firebase/storage";
+
 
 const initFilters = () => ({
   justification: '',
@@ -29,9 +24,9 @@ const initFilters = () => ({
 
 function  App() {
   const [data,setData] = useState([]);
-  const [dataToDisplay,setDataToDisplay] = useState([]);
   const [metadataObj, setMetadataObj] = useState();
-  const [filters, setFilters] = useState(initFilters())
+  const [numberOfItems, setNumberOfItems] = useState(10);
+  const [lastQuery, setLastQuery] = useState([where('description',"!=","")]);
   const [justification, setJustification ] = useState('');
   const [salutation, setSalutation ] = useState('');
   const [closing, setClosing ] = useState('');
@@ -65,48 +60,36 @@ function  App() {
     'businessType': businessType
   });
 
-  const filtersDependencies = [ justification,salutation,closing,selfReference,language,format,script,material,businessType];
-
-  useEffect(async ()=>{
-    queryDocs().then(res => {console.log(res); setData(res)});
+  useEffect(()=>{
+    getMetaData().then(res => setMetadataObj(res));
   },[])
-  
-  useEffect(()=>{
-    console.log(data);
-    if(data && Array.isArray(data)){
-      setMetadataObj(CreateSetsObject(data))
-      let obj = CreateSetsObject(data);
-      console.log(obj);
-    }
-    
-  },[data]);
 
   useEffect(()=>{
-    queryDocs().then(res => {console.log(res); setData(res)});
-  },[...filtersDependencies])
-  
+    queryDocs( lastQuery,numberOfItems )
+        .then(res => {console.log(res); setData(res)});
+  },[lastQuery,numberOfItems])
+
+  const updateFilterValue = (value,att) =>{
+    filtersSetters[att](value);
+    setLastQuery([where('description',"!=",""),where(att,"array-contains",value)])
+  }
+
   const getAutocompleteForFilter = (att) => <Grid item>
       { metadataObj && metadataObj[att] && filtersSetters && filtersSetters[att] &&
-        <AutocompleteSearch attribute={att} valuesSet={Array.from(metadataObj[att])} updateValue={filtersSetters[att]} />
+        <AutocompleteSearch attribute={att} valuesSet={Array.from(metadataObj[att])} updateValue={(value) => updateFilterValue(value, att)} />
       }
     </Grid>
 
-
-// TODO HERE
-  const getFilteredDocs = () =>{
-    const filtersObj = getFiltersValuesObject();
-    data.filter(doc => {
-      return doc && Object.keys(filtersObj).reduce((prev,currKey)=> 
-         prev && filtersObj[currKey]? doc[currKey].includes(filtersObj[currKey]) : true
-        ,true)  
-    })
+  const handleItemsNumberChange = e => {
+    e.preventDefault();
+    setNumberOfItems(e.target.value);
   }
 
-  console.log(getFilteredDocs());
 
   return (
     <div className="App">
       {false && <button onClick={update}>update</button>}
+      {false && <button onClick={updateMetaData}>updateMetaData</button>}
       <Stack>
         <div style={{textAlign:"center"}}>
           <h1>Mask Please!</h1>
@@ -114,6 +97,10 @@ function  App() {
           <h3>Weak Design, Strong TEI!</h3>
         </div>
         <Grid container spacing={2}>
+          <Grid item>
+          <Slider defaultValue={numberOfItems} aria-label="Number Of Items" valueLabelDisplay="on" onChange={handleItemsNumberChange} /> number of items
+          </Grid>
+          
           {
             Object.keys(getFiltersValuesObject()).map(key => getAutocompleteForFilter(key))
           }        
